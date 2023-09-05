@@ -1,7 +1,4 @@
-Check what the compare method of bcrypt returns.
-is it better to hash password in the model or after just receiving it in the controller?.
+User has a token which is used in order to send CarbonfootPrint info.
+Data of footprint stores with ref to the sending User.
 
-
-
-created User model,user controller, made register functionality and login:Please check
 
