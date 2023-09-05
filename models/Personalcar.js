@@ -16,9 +16,9 @@ var personalCarSchema = new mongoose.Schema({
         enum:["diesel","petrol"],
         required:true,
     },
-    engineSize:{
+    emission:{
         type:Number,
-        required:true,
+        defaultValue:0
     }
 });
 

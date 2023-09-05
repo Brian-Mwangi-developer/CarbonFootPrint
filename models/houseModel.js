@@ -18,6 +18,10 @@ var houseSchema = new mongoose.Schema({
     CookingGas:{
         type:Number,
         required:true,
+    },
+    emission:{
+        type:Number,
+        required:true,
     }
 });
 
