@@ -7,9 +7,22 @@ const publicTransport = require('../models/publicTransport');
 
 const HomefootPrint = asyncHandler(
     async (req, res) => {
+        const { Electricity, Cookingoil, CookingGas } = req.body;
         try {
-            const newHomeFootprint = await Home.create(req.body);
-            res.json(newHomeFootprint)
+            if (req.user) {
+                const newHomeFootprint = await Home.create({
+                    user_id: req.user.id,
+                    Electricity,
+                    Cookingoil,
+                    CookingGas,
+
+                });
+                res.json(newHomeFootprint)
+            } else {
+                res.status(401);
+                throw new Error("User is not authorized or token is missing in request");
+            }
+
         } catch (error) {
             throw new Error(error, "during Creating HomefootPrint")
         }
@@ -47,4 +60,4 @@ const PublictransfootPrint = asyncHandler(
     });
 
 
-module.exports = { HomefootPrint,MotorbikefootPrint,PublictransfootPrint,personalCarfootPrint }
+module.exports = { HomefootPrint, MotorbikefootPrint, PublictransfootPrint, personalCarfootPrint }
