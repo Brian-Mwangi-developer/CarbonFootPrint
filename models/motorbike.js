@@ -14,6 +14,10 @@ var motorbikeSchema = new mongoose.Schema({
     engineSize:{
         type:Number,
         required:true,
+    },
+    emission:{
+        type:Number,
+        defaultValue:0
     }
 },{
     timestamps:true,

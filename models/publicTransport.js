@@ -18,6 +18,10 @@ var PublictransSchema = new mongoose.Schema({
     Uber:{
         type:Number,
         required:true,
+    },
+    emission:{
+        type:Number,
+        defaultValue:0
     }
 },{
     timestamps:true,
