@@ -19,6 +19,10 @@ const Userschema =  mongoose.Schema({
         type:String,
         required:[true,"Please Add User Password"],
     },
+    points:{
+        type:Number,
+        default:0
+    }
 },{
     timestamps:true,
 });
