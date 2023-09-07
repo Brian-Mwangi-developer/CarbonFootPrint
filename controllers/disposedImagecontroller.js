@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const DisposedProd = require('../models/Disposedwastemodel');
 
 const DisposeItem = asyncHandler(async (req, res) => {
+    console.log(req.body)
     const { imageLink, quantity, description } = req.body;
 
     if (!imageLink) {
@@ -16,11 +17,11 @@ const DisposeItem = asyncHandler(async (req, res) => {
 
     try {
         if (req.user) {
-            const newProduct = await DisposedProd.create({
+            const newProduct = new DisposedProd({
                 user_id: req.user.id,
-                imageLink,
-                quantity,
-                description,
+                imageLink, // This should match the property name in your schema
+                quantity,  // This should match the property name in your schema
+                description, // This should match the property name in your schema
             });
 
             // Save the image to the database
@@ -36,4 +37,4 @@ const DisposeItem = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = {DisposeItem};
+module.exports = { DisposeItem };

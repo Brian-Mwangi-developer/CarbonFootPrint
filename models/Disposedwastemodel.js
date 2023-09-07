@@ -9,7 +9,7 @@ var DisposedProdSchema = new mongoose.Schema({
     },
     imageLink:{
         type:String,
-        required:true,
+        required:[true,"Provide Image"],
     },
     quantity:{
         type:Number,

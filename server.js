@@ -14,7 +14,7 @@ const PORT =process.env.PORT ||8080;
 dbConnect();
 app.use(cors())
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //Routes
 app.use('/api/calculator',calculatorRouter);
