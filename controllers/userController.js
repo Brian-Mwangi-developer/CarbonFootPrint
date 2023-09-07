@@ -2,44 +2,57 @@ const asyncHandler = require('express-async-handler');
 const User = require('../models/userModel');
 const { generateToken } = require('../config/generateToken');
 const bcrypt = require('bcrypt');
+const Token = require('../models/tokenModel');
 
 //Register a new User
 const registerUser = asyncHandler(async (req, res) => {
-    const {username,email,password,phoneNumber} = req.body;
-    if(!username || !email || !password || !phoneNumber){
+    const { username, email, password, phoneNumber } = req.body;
+    if (!username || !email || !password || !phoneNumber) {
         res.status(400);
         throw new Error("All fields are mandatory");
     }
-    const userAvailable = await User.findOne({email});
-    if(userAvailable){
+    const userAvailable = await User.findOne({ email });
+    if (userAvailable) {
         res.status(400);
         throw new Error("User already registered!");
     }
     const newuser = await User.create(req.body)
-    if(newuser) {
+    if (newuser) {
         res.status(201).json(newuser);
-    }else{
+    } else {
         res.status(400);
         throw new Error("User data is not valid")
     }
 });
 
-const LoginUser = asyncHandler(async(req,res)=>{
+const LoginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
-    if(!email || !password){
+    if (!email || !password) {
         res.status(400);
         throw new Error("All fields are mandatory!")
     }
     //check if user exists 
-    const findUser = await User.findOne({email});
-    if(findUser && (await bcrypt.compare(password, findUser.password))){
+    const findUser = await User.findOne({ email });
+    if (findUser && (await bcrypt.compare(password, findUser.password))) {
         const token = generateToken(findUser?.id);
-        res.status(200).json({ token})
-    }else{
-        res.status(401).json({message:"Authentication failed"});
+        await Token.deleteMany({});
+        const newToken = new Token({ token });
+        await newToken.save();
+        res.status(200).json({ token })
+    } else {
+        res.status(401).json({ message: "Authentication failed" });
     }
 });
 
+const retrieveToken = asyncHandler(async(req,res)=>{
+    const tokenDoc = await Token.findOne();
+
+    if (tokenDoc) {
+        res.status(200).json({ token: tokenDoc.token });
+    } else {
+        res.status(404).json({ message: 'Token not found' });
+    }
+});
 
 const updatedUser = asyncHandler(
     async (req, res) => {
@@ -76,10 +89,10 @@ const getAllUsers = asyncHandler(async (req, res) => {
 //get a single user
 const getSingleUser = asyncHandler(
     async (req, res) => {
-        const { id } = req.params;
-        validateMongoId(id);
+        const { _id } = req.user;
+        // validateMongoId(id);
         try {
-            const getaUser = await User.findById(id);
+            const getaUser = await User.findById(_id);
             res.json(getaUser);
 
         } catch (err) {
@@ -103,4 +116,4 @@ const deleteSingleUser = asyncHandler(async (req, res) => {
 
 
 
-module.exports ={registerUser,LoginUser,getAllUsers,getSingleUser,updatedUser,deleteSingleUser}
+module.exports = { registerUser, LoginUser, getAllUsers, getSingleUser, updatedUser, deleteSingleUser,retrieveToken }
